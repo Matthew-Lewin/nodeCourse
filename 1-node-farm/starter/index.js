@@ -25,11 +25,18 @@ fs.writeFileSync('./txt/output.txt', output);
  //Server stuff
 
  const http = require('http');
+ const url = require('url');
  
  const server = http.createServer((req, res) => {
-     res.end('Here - have a server.');
+     if (req.url === '/' || req.url === '/overview') {
+         res.end('This is the overview.');
+     } else if (req.url === '/product') {
+         res.end('This it the product.');
+     } else {
+         res.end("404: The page you are looking for ain't here");
+     }
  });
 
- server.listen(8000, '127.0.0.1', () => {
-     console.log('Server is running on port 8000.');
+ server.listen(3000, '127.0.0.1', () => {
+     console.log('Server is running on port 3000.');
  });
