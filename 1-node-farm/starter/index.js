@@ -33,7 +33,8 @@ fs.writeFileSync('./txt/output.txt', output);
      } else if (req.url === '/product') {
          res.end('This it the product.');
      } else {
-         res.end("404: The page you are looking for ain't here");
+         res.writeHead(404, {"Content-type" : "text/html"});
+         res.end("<h1>The page you are looking for ain't here</h1>");
      }
  });
 
