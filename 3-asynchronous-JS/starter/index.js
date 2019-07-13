@@ -33,10 +33,24 @@ const getDogPic = async () => {
     console.log("Random dog image saved to file!");
   } catch (err) {
     console.log(err);
+
+    throw err;
   }
+  return "Dog pic!";
 };
 
-getDogPic();
+(async () => {
+  try {
+    console.log("Getting dog pic...");
+    const x = await getDogPic();
+    console.log(x);
+    console.log("Done getting dog pic!");
+  } catch (err) {
+    console.log(err);
+  }
+})();
+
+/* getDogPic(); */
 
 /* readFilePro(`${__dirname}/dog.txt`)
   .then(data => {
