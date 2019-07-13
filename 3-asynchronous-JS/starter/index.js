@@ -10,23 +10,26 @@ const readFilePro = file => {
   });
 };
 
+const writeFilePro = (file, data) => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(file, data, err => {
+      if (err) reject("File could not be written.");
+      resolve("Success");
+    });
+  });
+};
+
 readFilePro(`${__dirname}/dog.txt`)
   .then(data => {
     console.log(`Breed: ${data}`);
-
-    superagent
-      .get(`https://dog.ceo/api/breed/${data}/images/random`)
-      .then(res => {
-        console.log(res.body.message);
-
-        fs.writeFile("dog-image.txt", res.body.message, err => {
-          if (err) return console.log(err.message);
-          console.log("Random dog image saved to file!");
-        });
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
+    return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
+  })
+  .then(res => {
+    console.log(res.body.message);
+    return writeFilePro("dog-img.txt", res.body.message);
+  })
+  .then(() => {
+    console.log("Random dog image saved to file!");
   })
   .catch(err => {
     console.log(err);
