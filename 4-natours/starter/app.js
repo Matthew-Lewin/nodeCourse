@@ -3,22 +3,30 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log('Hello from the middleware! 👩');
+  next();
+});
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
 
 const port = 3000;
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
-
-app.get('/api/v1/tours', (req, res) => {
+const getAllTours = (req, res) => {
   res.status(200).json({
+    time: req.requestTime,
     status: 'success',
     data: {
       tours
     }
   });
-});
+};
 
-app.get('/api/v1/tours/:id', (req, res) => {
+const getTour = (req, res) => {
   console.log(req.params);
 
   const id = req.params.id * 1;
@@ -37,9 +45,9 @@ app.get('/api/v1/tours/:id', (req, res) => {
       tour
     }
   });
-});
+};
 
-app.post('/api/v1/tours', (req, res) => {
+const createTour = (req, res) => {
   /* console.log(req.body);
   res.send('Done. 😉'); */
 
@@ -60,9 +68,9 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
-});
+};
 
-app.patch('/api/v1/tours/:id', (req, res) => {
+const updateTour = (req, res) => {
   const id = req.params.id * 1;
   if (id > tours.length) {
     return res.status(404).json({
@@ -76,7 +84,31 @@ app.patch('/api/v1/tours/:id', (req, res) => {
       tour: '<Updated tour here>'
     }
   });
-});
+};
+
+const deleteTour = (req, res) => {
+  const id = req.params.id * 1;
+  if (id > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'ID not found... 😑'
+    });
+  }
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+};
+app
+  .route('/api/v1/tours')
+  .get(getAllTours)
+  .post(createTour);
+
+app
+  .route('/api/v1/tours/:id')
+  .get(getTour)
+  .patch(updateTour)
+  .delete(deleteTour);
 
 app.listen(port, () => {
   console.log('App is running on port 3000...');
