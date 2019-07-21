@@ -23,11 +23,10 @@ const port = 3000;
 // 2) Route handlers
 
 // 3) Routes
-
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
-// 4) Start server
 
+// 4) Start server
 app.listen(port, () => {
   console.log('App is running on port 3000...');
 });
