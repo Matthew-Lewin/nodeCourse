@@ -4,8 +4,18 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'New tours must include both name and price. 💀'
+    });
+  }
+  next();
+};
+
 exports.checkID = (req, res, next, val) => {
-  console.log(val);
+  console.log(`ID is ${val}`);
   const id = req.params.id * 1;
   if (id > tours.length) {
     return res.status(404).json({
@@ -48,7 +58,7 @@ exports.createTour = (req, res) => {
   tours.push(newTour);
 
   fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
+    `${__dirname}/../dev-data/data/tours-simple.json`,
     JSON.stringify(tours),
     err => {
       res.status(201).json({
