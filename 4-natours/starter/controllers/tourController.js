@@ -27,7 +27,8 @@ exports.getAllTours = (req, res) => {
 };
 
 exports.getTour = (req, res) => {
-  const tour = tours.find(el => el.id === id);
+  const id = req.params.id * 1;
+  const tour = tours[id];
 
   res.status(200).json({
     status: 'success',
