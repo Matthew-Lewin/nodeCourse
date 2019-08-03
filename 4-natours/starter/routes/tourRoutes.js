@@ -1,8 +1,8 @@
 const express = require('express');
-const router = express.Router();
 const tourController = require('./../controllers/tourController');
 
-router.param('id', tourController.checkID);
+const router = express.Router();
+/* router.param('id', tourController.checkID); */
 
 // Check body for name and price
 // If not present return 400
