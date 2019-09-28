@@ -13,6 +13,8 @@ router
 // If not present return 400
 // Add it the POST middleware stack
 
+router.route('/tour-stats').get(tourController.getTourStats);
+
 router
   .route('/')
   .get(tourController.getAllTours)
