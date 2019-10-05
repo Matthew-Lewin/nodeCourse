@@ -95,7 +95,7 @@ tourSchema.virtual('durationWeeks').get(function() {
 
 // Document Middleware: runs before .save() and .create()
 
-tourSchema.pre('save', function() {
+tourSchema.pre('save', function(next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
